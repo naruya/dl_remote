@@ -4,8 +4,7 @@
 
 # [1] https://github.com/robbyrussell/oh-my-zsh
 # [2] https://github.com/pyenv/pyenv/wiki/common-build-problems
-# [3] https://github.com/openai/gym
-# [4] https://github.com/openai/mujoco-py/blob/master/Dockerfile
+# [3] https://github.com/openai/mujoco-py/blob/master/Dockerfile
 
 FROM nvidia/cudagl:9.2-devel-ubuntu18.04
 ENV DEBIAN_FRONTEND=noninteractive
@@ -55,7 +54,7 @@ RUN apt-get update && apt-get install -y icewm
 RUN source /root/.zshrc && \
     pip install gym
 
-# MuJoCo200,[4]  # TODO
+# MuJoCo150,[3]  # TODO
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
