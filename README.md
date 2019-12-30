@@ -25,3 +25,8 @@ use vnc viewer on your local machine
 $ cd tests
 $ python test_mujoco.py
 ```
+
+# Troubleshooting
+
+- Can't install via apt-get
+  - run `apt-get update`
