@@ -1,4 +1,4 @@
-# dl_remote
+# dl_remote (beta)
 For Deep Reinforcement Learning on remote server.
 
 # Usage
