@@ -6,6 +6,9 @@ jupyterlab
 
 moviepy
 
+# Mojoco
+mujoco_py
+
 # OpenAI Gym
 gym
 gym[all]
