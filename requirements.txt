@@ -1,10 +1,9 @@
 # Tensorflow
-tensorflow-gpu==2.0.0
+tensorflow-gpu==2.1.0
+tensorflow_probability
 
 # Jupyter
 jupyterlab
-
-moviepy
 
 # Mojoco
 mujoco_py
@@ -18,16 +17,18 @@ dm_control
 
 glfw>=1.4.0
 opencv-python
-
-numpy>=1.11
-numpydoc
-
-Cython>=0.27.2
-
+moviepy
 imageio>=2.1.2
 imagehash>=3.4
 cffi>=1.10
 fasteners~=0.15
+
+numpy>=1.11
+numpydoc
+pandas
+matplotlib
+
+Cython>=0.27.2
 
 ipdb
 Pillow>=4.0.0
