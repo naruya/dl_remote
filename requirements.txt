@@ -1,0 +1,36 @@
+# Tensorflow
+tensorflow-gpu==2.0.0
+
+# Jupyter
+jupyterlab
+
+moviepy
+
+# OpenAI Gym
+gym
+gym[all]
+
+glfw>=1.4.0
+
+numpy>=1.11
+numpydoc
+
+Cython>=0.27.2
+
+imageio>=2.1.2
+imagehash>=3.4
+cffi>=1.10
+fasteners~=0.15
+
+ipdb
+Pillow>=4.0.0
+
+pycparser>=2.17.0
+
+pytest>=3.0.5
+pytest-instafail==0.3.0
+
+sphinx
+sphinx_rtd_theme
+
+lockfile
