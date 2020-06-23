@@ -85,15 +85,26 @@ RUN apt-get install -y \
 RUN curl -o /usr/local/bin/patchelf https://s3-us-west-2.amazonaws.com/openai-sci-artifacts/manual-builds/patchelf_0.9_amd64.elf \
     && chmod +x /usr/local/bin/patchelf
 
-RUN mkdir -p /root/.mujoco && \
-    wget https://www.roboti.us/download/mjpro150_linux.zip -O mujoco.zip && \
-    unzip mujoco.zip -d /root/.mujoco && \
-    rm mujoco.zip
-RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/.mujoco/mjpro150/bin' >> /root/.zshrc && \
+
+# MuJoCo 2.0 (for dm_control)
+RUN mkdir -p $HOME/.mujoco && \
+  wget https://www.roboti.us/download/mujoco200_linux.zip -O mujoco.zip --no-check-certificate && \
+  unzip mujoco.zip -d $HOME/.mujoco && \
+  rm mujoco.zip && \
+  ln -s $HOME/.mujoco/mujoco200_linux $HOME/.mujoco/mujoco200
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$HOME/.mujoco/mujoco200/bin
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/.mujoco/mjpro200/bin' >> /root/.zshrc && \
     echo 'export DISPLAY=:0' >> /root/.zshrc
+
+# Fixes Segmentation Fault
+# See: https://github.com/openai/mujoco-py/pull/145#issuecomment-356938564
+ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libGLEW.so
+
+# Set MuJoCo rendering mode (for dm_control)
+ENV MUJOCO_GL "glfw"
+
 COPY mjkey.txt /root/.mujoco/
 
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/.mujoco/mjpro150/bin
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
