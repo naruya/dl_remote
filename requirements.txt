@@ -13,7 +13,11 @@ mujoco_py
 gym
 gym[all]
 
+# DeepMind's dm_control
+dm_control
+
 glfw>=1.4.0
+opencv-python
 
 numpy>=1.11
 numpydoc
