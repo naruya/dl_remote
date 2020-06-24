@@ -44,10 +44,10 @@ RUN apt-get update && \
     python-openssl --no-install-recommends
 
 RUN curl https://pyenv.run | zsh && \
-    echo '' >> /root/.zshrc && \
-    echo 'export PATH="/root/.pyenv/bin:$PATH"' >> /root/.zshrc && \
-    echo 'eval "$(pyenv init -)"' >> /root/.zshrc && \
-    echo 'eval "$(pyenv virtualenv-init -)"' >> /root/.zshrc
+    echo '' >> $HOME/.zshrc && \
+    echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> $HOME/.zshrc && \
+    echo 'eval "$(pyenv init -)"' >> $HOME/.zshrc && \
+    echo 'eval "$(pyenv virtualenv-init -)"' >> $HOME/.zshrc
 
 ENV PYENV_ROOT $HOME/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
@@ -64,7 +64,7 @@ RUN apt-get update && apt-get install -y ffmpeg nodejs npm
 RUN pip install setuptools && \
     pip install torch==1.5.1+cu101 torchvision==0.6.1+cu101 -f https://download.pytorch.org/whl/torch_stable.html && \
     echo 'alias jl="DISPLAY=:0 jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc && \
-    echo 'alias tb="tensorboard --logdir runs --bind_all &"' >> /root/.zshrc
+    echo 'alias tb="tensorboard --logdir runs --bind_all &"' >> $HOME/.zshrc
 
 # window manager
 RUN apt-get update && apt-get install -y icewm
@@ -93,8 +93,8 @@ RUN mkdir -p $HOME/.mujoco && \
   rm mujoco.zip && \
   ln -s $HOME/.mujoco/mujoco200_linux $HOME/.mujoco/mujoco200
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$HOME/.mujoco/mujoco200/bin
-RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/.mujoco/mjpro200/bin' >> /root/.zshrc && \
-    echo 'export DISPLAY=:0' >> /root/.zshrc
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.mujoco/mjpro200/bin' >> $HOME/.zshrc && \
+    echo 'export DISPLAY=:0' >> $HOME/.zshrc
 
 # Fixes Segmentation Fault
 # See: https://github.com/openai/mujoco-py/pull/145#issuecomment-356938564
@@ -103,16 +103,18 @@ ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libGLEW.so
 # Set MuJoCo rendering mode (for dm_control)
 ENV MUJOCO_GL "glfw"
 
-COPY mjkey.txt /root/.mujoco/
+RUN touch $HOME/.mujoco/mjkey.txt
 
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
+RUN rm $HOME/.mujoco/mjkey.txt
+
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY start.sh /root/
-COPY test_mujoco.py /root/tests/
+COPY start.sh $HOME/
+COPY test_mujoco.py $HOME/tests/
 
-WORKDIR /root
+WORKDIR $HOME
 CMD ["zsh"]
