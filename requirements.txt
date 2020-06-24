@@ -1,5 +1,5 @@
 # Tensorflow
-tensorflow-gpu==2.1.0
+tensorflow-gpu==2.2.0
 tensorflow_probability
 
 # Jupyter
