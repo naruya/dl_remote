@@ -6,7 +6,7 @@
 # [2] https://github.com/pyenv/pyenv/wiki/common-build-problems
 # [3] https://github.com/openai/mujoco-py/blob/master/Dockerfile
 
-FROM nvidia/cudagl:10.2-devel-ubuntu18.04
+FROM nvidia/cudagl:10.1-devel-ubuntu18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV HOME /root
