@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.3'
 services:
   app:
     image: local/dl_remote:latest
@@ -15,6 +15,10 @@ services:
       - 6006:6006
       - 5900:5900
       - 8888:8888
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
     command: |-
       bash -xc '
       /root/start.sh
