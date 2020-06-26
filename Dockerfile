@@ -61,7 +61,7 @@ RUN apt-get install -y xvfb x11vnc python-opengl --no-install-recommends
 
 # Python, Jupyter
 RUN apt-get update && apt-get install -y ffmpeg nodejs npm
-RUN pip install setuptools && \
+RUN pip install 'setuptools>=41.0.0' && \
     pip install torch==1.5.1+cu101 torchvision==0.6.1+cu101 -f https://download.pytorch.org/whl/torch_stable.html && \
     echo 'alias jl="DISPLAY=:0 jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc && \
     echo 'alias tb="tensorboard --logdir runs --bind_all &"' >> $HOME/.zshrc

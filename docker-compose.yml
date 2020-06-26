@@ -9,7 +9,8 @@ services:
     tty: true
     volumes:
     - $HOME/.mujoco/mjkey.txt/:/root/.mujoco/mjkey.txt
-    # - ./ipython:/root/.ipython
+    - $HOME/docker/ipython:/root/.ipython
+    - $HOME/docker/workspace:/root/workspace
     working_dir: /root
     ports:
       - 6006:6006
