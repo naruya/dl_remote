@@ -1,13 +1,13 @@
 # dl_remote
 
-# Usage
+### Usage
 
 ```
 $ ssh foo@bar -L 8888:localhost:38888 -L 5900:localhost:35900
 $ docker run --gpus all -it --privileged -p 38888:8888 -p 35900:5900 --name dl_remote naruya/dl_remote
 ```
 
-## docker build
+### docker build
 
 ```
 $ git clone https://github.com/naruya/dl_remote.git
