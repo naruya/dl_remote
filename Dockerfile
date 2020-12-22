@@ -32,7 +32,6 @@ RUN apt-get update && apt-get install -y \
 RUN source /root/.zshrc && \
     pip install setuptools jupyterlab && \
     pip install torch torchvision && \
-    pip install tensorflow && \
     echo 'alias jl="DISPLAY=:0 jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc
 
 # utils
