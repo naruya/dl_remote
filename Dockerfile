@@ -1,13 +1,16 @@
+# [1] https://github.com/robbyrussell/oh-my-zsh
+# [2] https://github.com/pyenv/pyenv/wiki/common-build-problems
+
 FROM nvidia/cuda:10.2-devel-ubuntu18.04
 ENV DEBIAN_FRONTEND=noninteractive
 
-# zsh ----------------
+# zsh,[1] ----------------
 RUN apt-get update && apt-get install -y \
     wget git zsh
 SHELL ["/bin/zsh", "-c"]
 RUN wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
 
-# pyenv ----------------
+# pyenv,[2] ----------------
 RUN apt-get update && apt-get install -y \
     build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
     libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
