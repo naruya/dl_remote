@@ -1,4 +1,4 @@
-# CUDA 11.0, CUDNN 8.0, Tensorflow, Pytorch, zsh, pyenv, vnc
+# CUDA 11.0, CUDNN 8.0, Tensorflow, PyTorch, zsh, pyenv, vnc
 # See -> https://hub.docker.com/r/naruya/dl_remote
 
 # [1] https://github.com/robbyrussell/oh-my-zsh
@@ -6,8 +6,7 @@
 # [3] https://github.com/tensorflow/tensorflow/blob/v2.4.0/tensorflow/tools/dockerfiles/dockerfiles/gpu.Dockerfile
 
 
-# tensorflow,[3] ################################
-
+# tensorflow (from [3]) ################################
 ARG UBUNTU_VERSION=18.04
 
 ARG ARCH=
@@ -78,13 +77,13 @@ RUN ln -s $(which python3) /usr/local/bin/python
 ################################
 
 
-# zsh,[1] ----------------
+# zsh (from [1]) ----------------
 RUN apt-get update && apt-get install -y \
     wget git zsh
 SHELL ["/bin/zsh", "-c"]
 RUN wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
 
-# pyenv,[2] ----------------
+# pyenv (from [2]) ----------------
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
