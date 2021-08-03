@@ -6,7 +6,7 @@
 # [3] https://github.com/tensorflow/tensorflow/blob/v2.4.0/tensorflow/tools/dockerfiles/dockerfiles/gpu.Dockerfile
 
 
-# tensorflow (from [3]) ################################
+# TensorFlow (from [3]) ----------------
 ARG UBUNTU_VERSION=18.04
 
 ARG ARCH=
@@ -59,22 +59,8 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/lib
     && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
     && ldconfig
 
-# See http://bugs.python.org/issue19846
-ENV LANG C.UTF-8
-
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip
-
-RUN python3 -m pip --no-cache-dir install --upgrade \
-    "pip<20.3" \
-    setuptools
-
-# Some TF tools expect a "python" binary
-RUN ln -s $(which python3) /usr/local/bin/python
-
-
-################################
+# bug (4 Aug 2020)
+RUN ln -s /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.10 /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.11
 
 
 # zsh (from [1]) ----------------
@@ -82,6 +68,7 @@ RUN apt-get update && apt-get install -y \
     wget git zsh
 SHELL ["/bin/zsh", "-c"]
 RUN wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+RUN sed -i 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/g' ~/.zshrc
 
 # pyenv (from [2]) ----------------
 ENV DEBIAN_FRONTEND=noninteractive
@@ -90,34 +77,36 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
     xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
 RUN curl https://pyenv.run | zsh && \
-    echo 'export PATH="/root/.pyenv/bin:$PATH"' >> /root/.zshrc && \
-    echo 'eval "$(pyenv init -)"' >> /root/.zshrc && \
+    echo '' >> /root/.zshrc && \
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.zshrc && \
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.zshrc && \
+    echo 'eval "$(pyenv init --path)"' >> /root/.zshrc && \
     echo 'eval "$(pyenv virtualenv-init -)"' >> /root/.zshrc
 RUN source /root/.zshrc && \
-    pyenv install 3.8.0 && \
-    pyenv global 3.8.0 && \
+    pyenv install 3.8.11 && \
+    pyenv global 3.8.11 && \
     pip install -U pip
 
 # X window ----------------
 RUN apt-get update && apt-get install -y \
     xvfb x11vnc python-opengl icewm
+RUN echo 'alias vnc="export DISPLAY=:0; Xvfb :0 -screen 0 1400x900x24 &; icewm-session &; x11vnc -display :0 -forever -noxdamage > /dev/null 2>&1 &"' >> /root/.zshrc
 
-# DL ----------------
+# DL libraries and jupyter ----------------
 RUN source /root/.zshrc && \
     pip install setuptools jupyterlab && \
     pip install tensorflow && \
-    pip install pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html && \
-    echo 'alias jl="DISPLAY=:0 jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc && \
-    echo 'alias tb="tensorboard --logdir runs --bind_all &"' >> /root/.zshrc
-
+    pip install pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html && \
+    echo 'alias jl="jupyter lab --ip 0.0.0.0 --port 8888 --NotebookApp.token='' --allow-root &"' >> /root/.zshrc && \
+    echo 'alias tb="tensorboard --host 0.0.0.0 --port 6006 --logdir runs &"' >> /root/.zshrc
 
 # utils ----------------
 RUN apt-get update && apt-get install -y \
     vim
 
+
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY start.sh /root/
 WORKDIR /root
 CMD ["zsh"]
