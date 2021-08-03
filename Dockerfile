@@ -90,7 +90,7 @@ RUN source /root/.zshrc && \
 # X window ----------------
 RUN apt-get update && apt-get install -y \
     xvfb x11vnc python-opengl icewm
-RUN echo 'alias vnc="export DISPLAY=:0; Xvfb :0 -screen 0 1400x900x24 &; icewm-session &; x11vnc -display :0 -forever -noxdamage > /dev/null 2>&1 &"' >> /root/.zshrc
+RUN echo 'alias vnc="export DISPLAY=:0; Xvfb :0 -screen 0 1400x900x24 &; x11vnc -display :0 -forever -noxdamage > /dev/null 2>&1 &; icewm-session &"' >> /root/.zshrc
 
 # DL libraries and jupyter ----------------
 RUN source /root/.zshrc && \
