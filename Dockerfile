@@ -68,7 +68,7 @@ RUN apt-get update && apt-get install -y \
     wget git zsh
 SHELL ["/bin/zsh", "-c"]
 RUN wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
-RUN sed -i 's/# DISABLE_AUTO_UPDATE="true"/DISABLE_AUTO_UPDATE="true"/g' ~/.zshrc
+RUN sed -i "s/# zstyle ':omz:update' mode disabled/zstyle ':omz:update' mode disabled/g" ~/.zshrc
 
 # pyenv (from [2]) ----------------
 ENV DEBIAN_FRONTEND=noninteractive
