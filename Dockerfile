@@ -25,7 +25,7 @@ RUN source ~/venv/torch/bin/activate && \
 # utils
 RUN apt-get update && apt-get install -y vim ffmpeg
 RUN source ~/venv/torch/bin/activate && \
-    pip install jupyterlab tensorboard && \
+    pip install jupyterlab tensorboard ipywidgets && \
     echo 'alias jl="jupyter lab --ip 0.0.0.0 --port 8888 --NotebookApp.token='' --allow-root &"' >> /root/.zshrc && \
     echo 'alias tb="tensorboard --host 0.0.0.0 --port 6006 --logdir runs &"' >> /root/.zshrc
 
