@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.8.0-devel-ubuntu20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 
@@ -15,12 +15,6 @@ RUN ln -s /usr/bin/python3.9 /usr/bin/python
 # vnc
 RUN apt-get update && apt-get install -y xvfb x11vnc icewm
 RUN echo 'alias vnc="export DISPLAY=:0; Xvfb :0 -screen 0 1400x900x24 &; x11vnc -display :0 -forever -noxdamage > /dev/null 2>&1 &; icewm-session &"' >> /root/.zshrc
-
-# torch
-RUN python -m venv /root/venv/torch
-RUN source ~/venv/torch/bin/activate && \
-    pip install -U pip && \
-    pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
 
 # utils
 RUN apt-get update && apt-get install -y vim ffmpeg
