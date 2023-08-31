@@ -19,7 +19,8 @@ RUN echo 'alias vnc="export DISPLAY=:0; Xvfb :0 -screen 0 1400x900x24 &; x11vnc 
 # venv
 RUN python -m venv /root/venv/work
 RUN source /root/venv/work/bin/activate && \
-    pip install -U pip
+    pip install -U pip && \
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # utils
 RUN apt-get update && apt-get install -y htop vim ffmpeg
