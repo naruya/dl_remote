@@ -17,7 +17,7 @@ RUN ln -s /usr/bin/python3.9 /usr/bin/python
 
 # vnc
 RUN apt-get update && apt-get install -y xvfb x11vnc icewm
-RUN echo 'alias vnc="export DISPLAY=:0; Xvfb :0 -screen 0 1400x900x24 &; x11vnc -display :0 -forever -noxdamage > /dev/null 2>&1 &; icewm-session &"' >> /root/.zshrc
+RUN echo 'alias vnc="export DISPLAY=:99; Xvfb :99 -screen 0 1400x900x24 &; x11vnc -display :99 -forever -noxdamage > /dev/null 2>&1 &; icewm-session &"' >> /root/.zshrc
 
 # venv
 RUN python -m venv /root/venv/work
