@@ -95,7 +95,7 @@ RUN source /root/.zshrc && \
 
 # vnc ----------------
 RUN apt-get update && apt-get install -y xvfb x11vnc python-opengl icewm
-RUN echo 'alias vnc="export DISPLAY=:0; Xvfb :0 -screen 0 1400x900x24 &; x11vnc -display :0 -forever -noxdamage > /dev/null 2>&1 &; icewm-session &"' >> /root/.zshrc
+RUN echo 'alias vnc="export DISPLAY=:99; Xvfb :99 -screen 0 1400x900x24 & until xdpyinfo > /dev/null 2>&1; do sleep 0.1; done; x11vnc -display :99 -forever -noxdamage -rfbport 5900 > /dev/null 2>&1 & until lsof -i :5900 > /dev/null; do sleep 0.1; done; icewm-session &"' >> /root/.zshrc
 
 
 # deep ----------------
