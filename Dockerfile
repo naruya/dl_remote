@@ -29,7 +29,7 @@ RUN source /root/venv/work/bin/activate && \
 RUN apt-get update && apt-get install -y htop vim ffmpeg
 RUN source /root/venv/work/bin/activate && \
     pip install jupyterlab ipywidgets && \
-    echo 'alias jup="jupyter lab --ip 0.0.0.0 --port 8888 --NotebookApp.token='' --allow-root &"' >> /root/.zshrc
+    echo 'alias jup="jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
