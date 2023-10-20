@@ -108,7 +108,7 @@ RUN echo 'alias vnc="export DISPLAY=:99; Xvfb :99 -screen 0 1400x900x24 & until 
 RUN apt-get update && apt-get install -y vim ffmpeg
 RUN source /root/.zshrc && \
     pip install ipywidgets jupyterlab tensorboard && \
-    echo 'alias jl="jupyter lab --ip 0.0.0.0 --port 8888 --NotebookApp.token='' --allow-root &"' >> /root/.zshrc && \
+    echo 'alias jl="jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc && \
     echo 'alias tb="tensorboard --host 0.0.0.0 --port 6006 --logdir runs &"' >> /root/.zshrc
 
 
