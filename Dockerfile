@@ -1,12 +1,10 @@
 # CUDA 11.2, CUDNN 8.1, Tensorflow, PyTorch, zsh, pyenv, vnc
 # See -> https://hub.docker.com/r/naruya/dl_remote
 
-# [1] https://github.com/robbyrussell/oh-my-zsh
-# [2] https://github.com/pyenv/pyenv/wiki#suggested-build-environment
-# [3] https://github.com/tensorflow/tensorflow/blob/c70994edddf74bef2189325c571621c2b9de38a5/tensorflow/tools/dockerfiles/dockerfiles/gpu.Dockerfile
+# [1] https://github.com/tensorflow/tensorflow/blob/c70994edddf74bef2189325c571621c2b9de38a5/tensorflow/tools/dockerfiles/dockerfiles/gpu.Dockerfile
 
 
-# TensorFlow (from [3]) ----------------
+# TensorFlow (from [1]) ----------------
 ARG UBUNTU_VERSION=20.04
 
 ARG ARCH=
@@ -68,48 +66,39 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/lib
     && ldconfig
 
 
-# zsh (from [1]) ----------------
+# zsh
 RUN apt-get update && apt-get install -y wget git zsh
 SHELL ["/bin/zsh", "-c"]
 RUN wget http://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
 RUN sed -i "s/# zstyle ':omz:update' mode disabled/zstyle ':omz:update' mode disabled/g" ~/.zshrc
 
 
-# pyenv (from [2]) ----------------
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev curl llvm \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
-RUN curl https://pyenv.run | zsh && \
-    echo '' >> /root/.zshrc && \
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.zshrc && \
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.zshrc && \
-    echo 'eval "$(pyenv init --path)"' >> /root/.zshrc && \
-    echo 'eval "$(pyenv virtualenv-init -)"' >> /root/.zshrc
-RUN source /root/.zshrc && \
-    pyenv install 3.8.13 && \
-    pyenv global 3.8.13 && \
-    pip install -U pip && \
-    pip install setuptools
+# python (latest version)
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get update && apt-get install -y python3.8 python3.8-dev python3.8-venv python3-pip
+RUN ln -s /usr/bin/python3.8 /usr/bin/python
 
 
-# vnc ----------------
-RUN apt-get update && apt-get install -y xvfb x11vnc python-opengl icewm lsof
-RUN echo 'alias vnc="export DISPLAY=:99; Xvfb :99 -screen 0 1400x900x24 & until xdpyinfo > /dev/null 2>&1; do sleep 0.1; done; x11vnc -display :99 -forever -noxdamage -rfbport 5900 > /dev/null 2>&1 & until lsof -i :5900 > /dev/null; do sleep 0.1; done; icewm-session &"' >> /root/.zshrc
+# vnc
+RUN apt-get update && apt-get install -y xvfb x11vnc icewm lsof net-tools
+RUN echo "alias vnc='PASSWORD=\$(openssl rand -hex 24); for i in {99..0}; do export DISPLAY=:\$i; if ! xdpyinfo &>/dev/null; then break; fi; done; for i in {5999..5900}; do if ! netstat -tuln | grep -q \":\$i \"; then PORT=\$i; break; fi; done; Xvfb \$DISPLAY -screen 0 1400x900x24 & until xdpyinfo > /dev/null 2>&1; do sleep 0.1; done; x11vnc -forever -noxdamage -display \$DISPLAY -rfbport \$PORT -passwd \$PASSWORD > /dev/null 2>&1 & until lsof -i :\$PORT > /dev/null; do sleep 0.1; done; icewm-session &; echo DISPLAY=\$DISPLAY, PORT=\$PORT, PASSWORD=\$PASSWORD'" >> ~/.zshrc
 
 
-# deep ----------------
-# RUN source /root/.zshrc && \
-#     pip install tensorflow && \
-#     pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117
+# venv
+RUN python -m venv /root/venv/work
+RUN source /root/venv/work/bin/activate && \
+    pip install -U pip setuptools && \
+    pip install tensorflow && \
+    echo 'source /root/venv/work/bin/activate' >> /root/.zshrc
 
 
-# utils ----------------
-RUN apt-get update && apt-get install -y vim ffmpeg
-RUN source /root/.zshrc && \
-    pip install ipywidgets jupyterlab tensorboard && \
-    echo 'alias jl="jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc && \
-    echo 'alias tb="tensorboard --host 0.0.0.0 --port 6006 --logdir runs &"' >> /root/.zshrc
+# utils
+RUN apt-get update && apt-get install -y htop vim ffmpeg
+RUN source /root/venv/work/bin/activate && \
+    pip install jupyterlab ipywidgets && \
+    echo 'alias jup="jupyter lab --ip 0.0.0.0 --port 8888 --allow-root &"' >> /root/.zshrc
 
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
