@@ -16,9 +16,6 @@ $ docker run --gpus all -it --privileged -p 5900:5900 -p 6006:6006 -p 8888:8888 
 
 ## Test
 
-### Pytorch
-- `python -c "import torch; print(torch.cuda.device_count())"`
-
 ### Tensorflow
 - `python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"`
 
