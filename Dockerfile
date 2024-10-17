@@ -12,8 +12,8 @@ RUN sed -i "s/# zstyle ':omz:update' mode disabled/zstyle ':omz:update' mode dis
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get update && apt-get install -y python3.9 python3.9-dev python3.9-venv python3-pip
-RUN ln -s /usr/bin/python3.9 /usr/bin/python
+RUN apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-venv python3-pip
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 # vnc
 RUN apt-get update && apt-get install -y xvfb x11vnc icewm lsof net-tools
