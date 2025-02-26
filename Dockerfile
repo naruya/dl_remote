@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu20.04
+FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 
@@ -23,7 +23,7 @@ RUN echo "alias vnc='PASSWORD=\$(openssl rand -hex 24); for i in {99..0}; do exp
 RUN python -m venv /root/venv/work
 RUN source /root/venv/work/bin/activate && \
     pip install -U pip setuptools && \
-    pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 torchaudio==2.0.1 --extra-index-url https://download.pytorch.org/whl/cu118 && \
+    pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113 && \
     echo 'source /root/venv/work/bin/activate' >> /root/.zshrc
 
 # utils
